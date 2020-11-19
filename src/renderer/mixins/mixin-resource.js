@@ -54,6 +54,15 @@ export default {
             this.$electron.clipboard.writeText(text)
             this.$Message.info("文件路径已复制到剪贴板")
         },
+        // 获取文件url
+        getFileUrl(file, copyType) {
+            return util.getClipboardText(copyType ? copyType : this.setup_copyType, this.getResourceUrl(file), file);
+        },
+        // 设置文本到剪贴板
+        setTextToClipboard(text) {
+          this.$electron.clipboard.writeText(text);
+          this.$Message.info("文件路径已复制到剪贴板");
+        },
         resourceAction(files, action) {
             files = Array.isArray(files) ? files : [files]
 

@@ -1,5 +1,5 @@
 <template>
-    <div ref="content" class="layout-content">
+    <div ref="content" class="layout-content" @click.ctrl="copyUrlFromSelected">
         <v-contextmenu ref="folderMenu" @contextmenu="handleFolderMenu">
             <v-contextmenu-item @click="handleFolderMenuClick(1)">详情</v-contextmenu-item>
             <v-contextmenu-item divider></v-contextmenu-item>
@@ -305,6 +305,14 @@ export default {
             this.remain0 = height / 29
             this.remain1 = height / 123
         }
+        // 监听拷贝事件
+        window.document.body.oncopy = () => {
+          this.copyUrlFromSelected();
+        };
+    },
+    beforeDestroy() {
+      // 销毁拷贝事件
+      window.document.body.oncopy = null;
     },
     methods: {
         inited(viewer) {
@@ -316,7 +324,6 @@ export default {
         clickItem(file, index) {
             let time = new Date().getTime()
             const CLICKTIME = 300
-
             if (time - this.itemClickTime < CLICKTIME) {
                 this.itemClickTime = 0
 
@@ -500,6 +507,39 @@ export default {
                     break
             }
             this.bucket.selection = []
+        },
+        /**
+         * 快捷复制选中链接
+         */
+        copyUrlFromSelected() {
+          const CLICKTIME = 400;
+          // 延时一下才有数据，因为原项目要判断双击预览
+          setTimeout(() => {
+            // console.log(this.selection); // 选中项序号
+            // console.log(this.bucket.selection); // 选中的所有文件，包括文件下的文件;
+            // console.log(this.files); // 所有文件和文件夹;
+            // 没有选中数据时
+            if (this.bucket.selection.length === 0) {
+              return;
+            }
+
+            // 判断是否选中了文件夹
+            if (this.selection.some(index => this.files[index]._directory)) {
+              this.$Message.info("暂时不支持复制整个文件夹");
+              return;
+            }
+
+            // 单个文件/多个文件分别处理
+            if (this.bucket.selection.length === 1) {
+              this.copyFileUrl(this.bucket.selection[0])
+            } else {
+              let urls = '';
+              this.bucket.selection.forEach(file => {
+                urls += this.getFileUrl(file) + '\n';
+              });
+              this.setTextToClipboard(urls);
+            }
+          }, CLICKTIME);
         }
     }
 }
