@@ -9,6 +9,7 @@ dist/web/*
 build/*
 !build/icons
 node_modules/
+package-lock.json
 !.gitkeep
 .idea
 static/dll
