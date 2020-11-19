@@ -1,3 +1,17 @@
+本项目fork自：https://github.com/willnewii/qiniuClient
+
+使用过程中，为了方便，就自己改了一点，这里记录一下。
+
+## 功能新增
+
+2020.11.19
+- 新增快捷键拷贝文件链接：
+    - Ctrl + C （选中你需要拷贝链接的文件）
+    - Ctrl + 鼠标点选
+
+
+> 以下为原项目readme
+
 # 云存储管理客户端 v0.5.1
 
 ![](http://blog-res.mayday5.me/file/icon.png?imageView2/1/w/80/h/80/q/75|imageslim) 朋友给做的新图标
